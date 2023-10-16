@@ -25,7 +25,7 @@ def check_port(ip, port):
         return False
 
 
-srcfile = openpyxl.load_workbook('ups.xlsx', read_only=False, keep_vba=True)
+srcfile = openpyxl.load_workbook('/home/singhnavneet.su/ups_sheet_update/ups.xlsx', read_only=False, keep_vba=True)
 sheetname = srcfile.active
 ip_col = 1
 ping_col = 1
