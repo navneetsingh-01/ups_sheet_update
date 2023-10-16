@@ -2,42 +2,14 @@ import socket
 from ping3 import ping
 import openpyxl
 
-# import paramiko
-# def send_command(ssh_client, command):
-#     stdin, stdout, stderr = ssh_client.exec_command(command)
-#     response = stdout.read().decode()
-#     return response
-
-# def main():
-#     # Replace with the actual SSH credentials and UPS hostname/IP address
-#     host = "phx-basth-lp003"
-#     port = 22  # Default SSH port
-#     username = "singhnavneet.su"
-#     password = "(!IWrIx=wYdB|{3pJfrE"
-#     ssh = paramiko.SSHClient()
-#     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-#     try:
-#         ssh.connect(host, port, username=username, password=password)
-#         command = "python3 ups_update/main.py"  # Replace with the actual command you want to send
-#         response = send_command(ssh, command)
-#         print("Response: ", response)
-#     except paramiko.AuthenticationException:
-#         print("Authentication failed. Check your credentials.")
-#     except paramiko.SSHException as e:
-#         print(f"SSH error: {e}")
-#     finally:
-#         ssh.close()
-
-# if __name__ == "__main__":
-#     main()
 
 def check_ping(ip):
     response_time = ping(ip)
     if response_time is not None:
-        print(f'{ip} is pingable')
+        # print(f'{ip} is pingable')
         return True
     else:
-        print(f'{ip} is not pingable')
+        # print(f'{ip} is not pingable')
         return False
 
 
@@ -46,10 +18,10 @@ def check_port(ip, port):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.settimeout(2)
             s.connect((ip, port))
-        print(f'{port} is open for {ip}')
+        # print(f'{port} is open for {ip}')
         return True
     except (socket.timeout, ConnectionRefusedError):
-        print(f'{port} is not open for {ip}')
+        # print(f'{port} is not open for {ip}')
         return False
 
 
@@ -68,23 +40,22 @@ for row_cells in sheetname.iter_rows(min_row=2, max_row=10):
     ip = row_cells[ColNames['ip']].value
     if ip is not None and ip.count('.') == 3:
         if check_ping(ip) and check_port(ip, 443) and check_port(ip, 80):
-            print(ip)
+            # print(ip)
             initial = sheetname.cell(row=idx, column=ColNames['ping']+1).value
             sheetname.cell(row=idx, column=ColNames['ping']+1).value = '1'
             final = sheetname.cell(row=idx, column=ColNames['ping']+1).value
-            if str(initial) != str(final):
-                print(
-                    f"Changing ping value from {initial} to {final} for {ip}")
+            # if str(initial) != str(final):
+            #     print(
+            #         f"Changing ping value from {initial} to {final} for {ip}")
         else:
             initial = sheetname.cell(row=idx, column=ColNames['ping']+1).value
             sheetname.cell(row=idx, column=ColNames['ping']+1).value = '0'
             final = sheetname.cell(row=idx, column=ColNames['ping']+1).value
-            if str(initial) != str(final):
-                print(
-                    f"Changing ping value from {initial} to {final} for {ip}")
+            # if str(initial) != str(final):
+            #     print(
+            #         f"Changing ping value from {initial} to {final} for {ip}")
     response += final
     response += " "
     idx += 1
 
 print(response)
-srcfile.save('updated_ups.xlsx')
